@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteBase /
+
+RewriteRule ^(.*)$ public/$1
