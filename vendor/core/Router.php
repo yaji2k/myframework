@@ -16,11 +16,20 @@ class Router {
     }
 
     public function run() {
-//        debug(getType($this->query));
-//        debug(getType($this->param));
-//        echo phpinfo();   
-        $this->checkValid($this->query);
-        echo debug(self::$route);
+        if ($this->checkValid($this->query)) {
+            $className = "app\controllers\\{$this->className()}";
+            if (class_exists($className)) {
+                $obj = new $className;
+                $methodName = $this->methodName();
+                if(method_exists($obj, $methodName)) {
+                    $obj ->$methodName();
+                }
+            } else {
+                echo "Контроллер $className не найден";
+            }
+        } else {
+            echo 'страница не существует';
+        }
     }
 
     private function query() {
@@ -32,16 +41,16 @@ class Router {
         $this->query = $explode[0];
         $this->param = $explode[1];
     }
-    
+
     private function checkValid($subject) {
         foreach (self::$routes as $pattern => $route) {
             if (preg_match("~$pattern~", $subject, $matches)) {
                 foreach ($matches as $key => $value) {
-                    if(is_string($key)) {
+                    if (is_string($key)) {
                         $route[$key] = $value;
                     }
                 }
-                self::$route = $route;
+                return self::$route = $route;
             }
         }
     }
@@ -53,6 +62,15 @@ class Router {
 
     private function lower($str) {
         return strtolower($str);
+    }
+
+    private function className() {
+        $controller = $this->uCCase(self::$route['controller']);
+        return $controller . 'Controller';
+    }
+    private function methodName() {
+        $action = $this->lower(self::$route['action']);
+        return $action . 'Action';
     }
 
     public function getRoutes() {

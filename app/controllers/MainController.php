@@ -1,5 +1,9 @@
 <?php
+namespace app\controllers;
 
 class MainController {
-    //put your code here
+    
+    public function indexAction() {
+        echo 'Main';
+    }
 }
