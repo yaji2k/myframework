@@ -21,8 +21,9 @@ class Router {
             if (class_exists($className)) {
                 $obj = new $className;
                 $methodName = $this->methodName();
-                if(method_exists($obj, $methodName)) {
-                    $obj ->$methodName();
+                if (method_exists($obj, $methodName)) {
+                    $obj->$methodName();
+                    $obj->view(self::$route);
                 }
             } else {
                 echo "Контроллер $className не найден";
@@ -49,7 +50,11 @@ class Router {
                     if (is_string($key)) {
                         $route[$key] = $value;
                     }
+                                }
+                if(!$route['action']) {
+                    $route['action'] = 'index';
                 }
+                $route['controller'] = $this->uCCase($route['controller']);
                 return self::$route = $route;
             }
         }
@@ -68,9 +73,14 @@ class Router {
         $controller = $this->uCCase(self::$route['controller']);
         return $controller . 'Controller';
     }
+
     private function methodName() {
         $action = $this->lower(self::$route['action']);
         return $action . 'Action';
+    }
+    
+    private function getObj() {
+        
     }
 
     public function getRoutes() {

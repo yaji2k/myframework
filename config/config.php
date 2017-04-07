@@ -2,6 +2,9 @@
 
 $config = [
     'routes' => [
+        '^(?<controller>[a-z-]+)/?$' => [
+            'action' => 'index',
+        ],
         '^$' => [
             'controller' => 'Main',
             'action' => 'index',
