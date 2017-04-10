@@ -10,7 +10,7 @@ class Router {
     private static $routes;
 
     public function __construct() {
-        include_once ROOT . '/config/config.php';
+        require ROOT . '/config/config.php';
         self::$routes = $config['routes'];
         $this->explode($this->query());
     }

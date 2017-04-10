@@ -8,8 +8,4 @@ class AppController extends Controller {
 
     public $layout = 'default';
 
-    public function indexAction() {
-//        $this->view();
-    }
-
 }
